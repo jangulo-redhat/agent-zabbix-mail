@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  labels:
+    app: {{ .Release.Name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: email-mcp
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SMTP_HOST
+              value: "{{ .Values.smtp.host }}"
+            - name: SMTP_PORT
+              value: "{{ .Values.smtp.port }}"
+            - name: SMTP_TLS
+              value: "{{ .Values.smtp.tls }}"
+            - name: SMTP_FROM
+              value: "{{ .Values.smtp.from }}"
+            - name: SMTP_USER
+              value: "{{ .Values.smtp.user }}"
+            - name: SMTP_PASSWORD
+              value: "{{ .Values.smtp.password }}"
+          securityContext:
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]

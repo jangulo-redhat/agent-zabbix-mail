@@ -1,0 +1,45 @@
+# https://github.com/zabbix-community/helm-zabbix
+# helm upgrade --install zabbix zabbix-community/zabbix -f values.yaml -n zabbix
+
+zabbixServer:
+  replicaCount: 1
+  resources:
+    requests:
+      cpu: 200m
+      memory: 256Mi
+
+zabbixProxy:
+  enabled: false
+
+zabbixAgent:
+  enabled: false
+
+zabbixJavaGateway:
+  enabled: false
+
+zabbixWeb:
+  enabled: true
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+postgresql:
+  enabled: true
+  auth:
+    username: zabbix
+    password: zabbix
+    database: zabbix
+    postgresPassword: postgres
+
+# OpenShift Route (chart >= 0.5.0)
+# If not supported, use ingress with OpenShift router annotations
+ingress:
+  enabled: true
+  annotations:
+    route.openshift.io/termination: edge
+  hosts:
+    - host: "zabbix.apps.CLUSTER_DOMAIN"
+      paths:
+        - path: /
+          pathType: Prefix

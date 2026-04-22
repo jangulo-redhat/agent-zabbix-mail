@@ -1,0 +1,43 @@
+# https://github.com/8gears/n8n-helm-chart
+# helm upgrade --install n8n 8gears/n8n -f values.yaml -n n8n
+
+replicaCount: 1
+
+secret:
+  n8n:
+    encryptionKey: "CHANGE_ME_32_CHARS_SECRET_KEY_1234"
+
+config:
+  executions:
+    pruneData: "true"
+    pruneDataMaxAge: 336
+
+ingress:
+  enabled: true
+  annotations:
+    route.openshift.io/termination: edge
+  hosts:
+    - host: "n8n.apps.CLUSTER_DOMAIN"
+      paths:
+        - path: /
+          pathType: Prefix
+
+persistence:
+  enabled: true
+  size: 5Gi
+
+podSecurityContext:
+  runAsNonRoot: true
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: ["ALL"]
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 512Mi
+  limits:
+    cpu: "1"
+    memory: 1Gi

@@ -1,0 +1,10 @@
+image:
+  repository: REGISTRY/zabbix-mcp  # replace with your registry after: podman build + push
+  tag: latest
+
+zabbix:
+  url: "http://zabbix-zabbix-web.zabbix.svc.cluster.local"
+  token: "CHANGE_ME"  # Zabbix API token from Administration → API tokens
+
+route:
+  host: "zabbix-mcp.apps.CLUSTER_DOMAIN"

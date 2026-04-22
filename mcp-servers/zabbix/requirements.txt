@@ -1,0 +1,2 @@
+fastmcp>=2.0.0
+pyzabbix>=1.4.0

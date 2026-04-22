@@ -1,0 +1,4 @@
+apiVersion: v2
+name: zabbix-mcp
+description: Zabbix MCP Server for AI agent integration
+version: 0.1.0
