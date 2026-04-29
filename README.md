@@ -29,7 +29,6 @@ User ──► N8N Chat Trigger (webhook)
 ### 0. Helm repos
 
 ```bash
-helm repo add 8gears https://8gears.container-registry.com/chartrepo/library
 helm repo add zabbix-community https://zabbix-community.github.io/helm-zabbix
 helm repo update
 ```
@@ -41,7 +40,7 @@ oc new-project zabbix
 helm upgrade --install zabbix zabbix-community/zabbix -f helm/zabbix/values.yaml -n zabbix
 ```
 
-After install: **Administration → API tokens** → create token → copy for Zabbix MCP config.
+After install: **User settings → API tokens** → create token → copy for Zabbix MCP config.
 
 ### 2. N8N
 
@@ -49,7 +48,8 @@ Edit `helm/n8n/values.yaml`: set `encryptionKey` and `CLUSTER_DOMAIN`.
 
 ```bash
 oc new-project n8n
-helm upgrade --install n8n 8gears/n8n -f helm/n8n/values.yaml -n n8n
+oc adm policy add-scc-to-user privileged -z n8n -n n8n # required to provide extra privilegies to n8n serviceAccount
+helm upgrade --install n8n oci://8gears.container-registry.com/library/n8n -f helm/n8n/values.yaml -n n8n
 ```
 
 ### 3. Build MCP images
